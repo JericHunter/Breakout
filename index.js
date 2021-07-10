@@ -1,15 +1,58 @@
+class Ball {
+    constructor() {
+      this.x = 250;
+      this.y = 160;
+      this.dx = 2;
+      this.dy = 2;
+      this.ballRadius = 10;
+      this.color = '#0095DD';
+    }
+  
+    drawBall(ctx) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.closePath();
+    }
+  
+    move() {
+      if (this.y + this.dy > canvas.height - this.ballRadius || this.y + this.dy < this.ballRadius) {
+        this.dy = -(this.dy);
+      }
+  
+      if (this.x + this.dx > canvasWidth - this.ballRadius || this.x + this.dx < this.ballRadius) {
+        this.dx = -(this.dx);
+      }
+  
+      this.x += this.dx;
+      this.y += this.dy;
+    }
+  
+    determineLoss(canvas, paddle) {
+      if (this.y + this.dy > canvas.height - this.ballRadius) {
+        if (this.x > paddle.x && this.x < paddle.x + paddle.width) {
+          this.dy = -(this.dy);
+        } else {
+          alert('GAME OVER'); // eslint-disable-line no-alert
+          document.location.reload();
+        }
+      }
+    }
+  }
+
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
+const canvasWidth = canvas.width;
+const canvasHeight = canvas.height;
 
-let x = canvas.width / 2;
-let y = canvas.height - 30;
 let dx = 2;
+
 let dy = -2;
 
 let score = 0;
 let lives = 3;
 
-const ballRadius = 10;
 
 const paddleHeight = 10;
 const paddleWidth = 75;
@@ -79,24 +122,6 @@ function drawBricks() {
   }
 }
 
-function collisionDetection() {
-    for (let c = 0; c < brickColumnCount; c += 1) {
-      for (let r = 0; r < brickRowCount; r += 1) {
-        const b = bricks[c][r];
-        if (b.status === 1) {
-          if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
-          dy = -dy;
-          b.status = 0;
-          score+=1;
-          if (score == brickColumnCount * brickRowCount) {
-            alert('CONGRATULATIONS, YOU WIN'); // eslint-disable-line no-alert
-            document.location.reload();
-          }
-        }
-      }
-    }
-  }
-}
 
 function drawScore() {
   ctx.font = '16px Arial';
@@ -108,14 +133,6 @@ function drawLives() {
   ctx.font = '16px Arial';
   ctx.fillStyle = '#0095DD';
   ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
-}
-
-function drawBall() {
-  ctx.beginPath();
-  ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = '#0095DD';
-  ctx.fill();
-  ctx.closePath();
 }
 
 function drawPaddle() {
