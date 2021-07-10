@@ -40,7 +40,60 @@ class Ball {
       }
     }
   }
+  class Brick {
+    constructor(x, y, status) {
+      this.x = x;
+      this.y = y;
+      this.status = status;
+      this.color = '#0095DD';
+      this.width = 75;
+      this.height = 20;
+    }
+  
+    drawBricks(ctx) {
+      ctx.beginPath();
+      ctx.rect(this.x, this.y, this.width, this.height);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.closePath();
+    }
+  
+    collisionDetection(ball) {
+      if (ball.x < this.x && ball.x < this.x + this.width
+        && ball.y > this.y
+        && ball.y < this.y + this.height) {
+        ball.dy = -(ball.dy); // eslint-disable-line
+        this.status = 0;
+      }
+    }
+  }
+class Brick {
+  constructor(x, y, status) {
+    this.x = x;
+    this.y = y;
+    this.status = status;
+    this.color = '#0095DD';
+    this.width = 75;
+    this.height = 20;
+  }
 
+  drawBricks(ctx) {
+    ctx.beginPath();
+    ctx.rect(this.x, this.y, this.width, this.height);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  collisionDetection(ball) {
+    if (ball.x < this.x && ball.x < this.x + this.width
+      && ball.y > this.y
+      && ball.y < this.y + this.height) {
+      ball.dy = -(ball.dy); // eslint-disable-line
+      this.status = 0;
+    }
+  }
+}  
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 const canvasWidth = canvas.width;
